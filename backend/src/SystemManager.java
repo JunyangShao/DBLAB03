@@ -1,5 +1,4 @@
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.*;
 import java.sql.Statement;
@@ -7,42 +6,70 @@ import java.sql.ResultSet;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+
 public class SystemManager {
     Logger logger = Logger.getLogger("SystemManager");
-    Connection conn = null;
-    Connection logIn(String username,String password){
+    private   Connection conn = null;
+    /**
+     *
+     * @param username
+     * @param password
+     * @return Connection object to the database,null if failed
+     */
+    boolean logIn(String username,String password){
+        Statement stmt = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-        }
-        catch (Exception ex){
-            logger.log(Level.SEVERE,"Cannot Find Driver",ex);
-        }
-        try {
-            String connectionURL =
-                    "jdbc:mysql://localhost:3306/dblab3?"
-                            + "user=root&password=jiang19961009&serverTimezone=GMT%2B8";
-            conn = DriverManager.getConnection(connectionURL);
-            Statement stmt = conn.createStatement();
-            String queryString = "select password from SystemManager where user=\'"+username + "\'";
-            ResultSet rs = stmt.executeQuery(queryString);
+            Connector connector = new Connector();
+            conn = connector.getConn();
+            stmt = conn.createStatement();
+            String queryString = "select password from SystemManager where username=\'"+username + "\'";
+            rs = stmt.executeQuery(queryString);
             String hash = sha1(password);
             if(!rs.next()){
-                return null; // 没有找到用户名
+                return false; // 没有找到用户名
             }
             else{
                if(hash.equals(rs.getString("password"))) {
-                   return conn;
+                   return true; //密码错误
                }
                else{
-                   return null;
+                   return false;
                }
             }
         }
         catch (SQLException ex){
             logger.log(Level.SEVERE,"Connection to Database Failed",ex);
         }
-        return null;
+        finally {
+            if(stmt!=null){
+                try {
+                    stmt.close();
+                }
+                catch (SQLException ex){
+                    ex.printStackTrace();
+                }
+            }
+            if(rs!=null){
+                try {
+                    rs.close();
+                }
+                catch (SQLException ex){
+                    ex.printStackTrace();
+                }
+
+            }
+
+        }
+        return false;
     }
+
+    /**
+     *
+     * @param portectData string to be hash
+     * @return hashed string, 40 bytes length
+     */
     private  String sha1(String portectData) {
         if (portectData.isEmpty()) {
             return "";
@@ -66,5 +93,8 @@ public class SystemManager {
             e.printStackTrace();
         }
         return "";
+    }
+    public Connection getConnect(){
+        return conn;
     }
 }
