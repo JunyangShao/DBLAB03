@@ -1,3 +1,4 @@
+package dblab3;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.*;
@@ -17,7 +18,7 @@ public class SystemManager {
      * @param password
      * @return Connection object to the database,null if failed
      */
-    boolean logIn(String username,String password){
+    public boolean logIn(String username,String password){
         Statement stmt = null;
         ResultSet rs = null;
         try {

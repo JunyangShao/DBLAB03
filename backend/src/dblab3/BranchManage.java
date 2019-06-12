@@ -1,5 +1,5 @@
+package dblab3;
 import java.sql.*;
-
 public class BranchManage {
     private Connector connector;
     private Connection conn=null;
