@@ -1,18 +1,25 @@
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import dblab3.SystemManager;
+import dblab3.BranchManage;
 public class Main {
     public static void main(String[]args){
-        SystemManager systemManager = new SystemManager();
-        System.out.println(sha1("123456"));
-        boolean loged = systemManager.logIn("dblab3","123456");
-        if(loged){
-            System.out.println("yes");
+        BranchManage branchManage = new BranchManage();
+        ResultSet rs = null;
+        boolean flag;
+        try {
+            flag = branchManage.update("song","song","klm","1000");
+            rs = branchManage.queryAll();
+            while (rs.next()){
+                System.out.println(rs.getString("branchname")+ " " + rs.getString("city"));
+            }
+
         }
-        else{
-            System.out.println("no");
+        catch (Exception ex){
+            ex.printStackTrace();
         }
     }
     private  static String sha1(String portectData) {
