@@ -311,7 +311,7 @@ public class BranchManage {
             return queryAll();
         }
     }
-    public boolean update(String name,String newName,String city,String assets){
+    public boolean update(String name,String newName,String city,String assets) throws SQLException {
         StringBuffer queryString = new StringBuffer("update branch set ");
         boolean flag = false;
         if(newName.length()!=0){
@@ -345,6 +345,11 @@ public class BranchManage {
             catch (SQLException ex){
                 System.out.println(ex.getMessage());
                 return false;
+            }
+            finally {
+                if(stmt!=null){
+                    stmt.close();
+                }
             }
         }
         else{

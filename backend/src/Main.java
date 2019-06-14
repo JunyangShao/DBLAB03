@@ -3,23 +3,22 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import dblab3.SystemManager;
-import dblab3.BranchManage;
+
+import dblab3.*;
+import sun.util.cldr.CLDRLocaleDataMetaInfo;
+
 public class Main {
     public static void main(String[]args){
-        BranchManage branchManage = new BranchManage();
-        ResultSet rs = null;
-        boolean flag;
+        AccountManage accountManage = new AccountManage();
+        boolean result = false;
         try {
-            flag = branchManage.update("song","song","klm","1000");
-            rs = branchManage.queryAll();
-            while (rs.next()){
-                System.out.println(rs.getString("branchname")+ " " + rs.getString("city"));
-            }
-
+           result = accountManage.addSavingAccount("2","johnA","SH","6","0.05","RMB");
+           if(result){
+               System.out.println("gg");
+           }
         }
         catch (Exception ex){
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
     }
     private  static String sha1(String portectData) {

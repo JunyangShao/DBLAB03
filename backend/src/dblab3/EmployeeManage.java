@@ -13,10 +13,10 @@ public class EmployeeManage {
         StringBuffer queryString = new StringBuffer("select * from employee where ");
         boolean flag = false;
         if(employId.length()!=0){
-            queryString.append("employid = \'"+employId +"\' and ");
+            queryString.append("employeeid = \'"+employId +"\' and ");
             flag = true;
         }
-        if(name.length()!=0){
+        if(branchName.length()!=0){
             queryString.append("branchname = \'" + branchName + "\' and ");
             flag = true;
         }
@@ -25,7 +25,7 @@ public class EmployeeManage {
             flag = true;
         }
         if(phoneNumber.length()!=0){
-            queryString.append("phonenumber = \'" + phoneNumber + "\' and ");
+            queryString.append("phonenum = \'" + phoneNumber + "\' and ");
             flag = true;
         }
         if(address.length()!=0){
@@ -86,7 +86,7 @@ public class EmployeeManage {
     }
     public boolean removeEmployee(String employId) throws SQLException {
         PreparedStatement stmt = null;
-        String removeString = "delete from employee where employid = ?";
+        String removeString = "delete from employee where employeeid = ?";
         try {
             stmt = conn.prepareStatement(removeString);
             stmt.setString(1,employId);
@@ -102,7 +102,67 @@ public class EmployeeManage {
             }
         }
     }
-    public boolean update(String employId, String branchName, String name, String phoneNumber, String address, String moveInDate){
-
+    public boolean update(String employeeId,String newemployId, String branchName, String name, String phoneNumber, String address, String moveInDate) throws SQLException {
+        StringBuffer queryString = new StringBuffer("update employee set ");
+        boolean flag = false;
+        if(newemployId.length()!=0){
+            queryString.append("employeeid = \'");
+            queryString.append(newemployId);
+            queryString.append("\',");
+            flag = true;
+        }
+        if(branchName.length()!=0){
+            queryString.append("branchname = \'");
+            queryString.append(branchName);
+            queryString.append("\',");
+            flag = true;
+        }
+        if(name.length()!=0){
+            queryString.append("name = \' ");
+            queryString.append(name);
+            queryString.append("\',");
+            flag = true;
+        }
+        if(phoneNumber.length()!=0){
+            queryString.append("phonenum = \'");
+            queryString.append(phoneNumber);
+            queryString.append("\',");
+            flag = true;
+        }
+        if(address.length()!=0){
+            queryString.append("address = \'");
+            queryString.append(address);
+            queryString.append("\',");
+            flag = true;
+        }
+        if(moveInDate.length()!=0){
+            queryString.append("moveindate = \'");
+            queryString.append(moveInDate);
+            queryString.append("\',");
+            flag = true;
+        }
+        if(flag){
+            queryString.deleteCharAt(queryString.length()-1);
+            queryString.append(" where employeeid = \'" + employeeId+"\'");
+            //System.out.println(queryString.toString());
+            Statement stmt = null;
+            try {
+                stmt = conn.createStatement();
+                stmt.executeUpdate(queryString.toString());
+                return true;
+            }
+            catch (SQLException ex){
+                System.out.println(ex.getMessage());
+                return false;
+            }
+            finally {
+                if(stmt!=null){
+                    stmt.close();
+                }
+            }
+        }
+        else{
+            return true;
+        }
     }
 }
