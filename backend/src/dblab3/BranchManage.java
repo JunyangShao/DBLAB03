@@ -251,7 +251,7 @@ public class BranchManage {
         }
         return Integer.MIN_VALUE;
     }
-    public ResultSet queryAll() throws SQLException {
+    private ResultSet queryAll() throws SQLException {
         String queryString = "select * from branch";
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -279,37 +279,42 @@ public class BranchManage {
         return rs;
     }
     public ResultSet query(String name,String city,String assets) throws SQLException {
-        StringBuffer queryString = new StringBuffer("select * from branch where ");
-        boolean flag = false;
-        if(name.length()!=0){
-            queryString.append("branchname=\'"+name+"\' and ");
-            flag = true;
-        }
-        if(city.length()!=0){
-            queryString.append("city=\'"+city + "\' and ");
-            flag = true;
-        }
-        if(assets.length()!=0){
-            queryString.append("assets = "+assets +" and ");
-            flag = true;
-        }
-        if(flag) {
-            //queryString.deleteCharAt(queryString.length() - 1);
-            queryString.delete(queryString.length()-5,queryString.length());
-           // System.out.println(queryString.toString());
-            Statement stmt = null;
-            ResultSet rs = null;
-            try {
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(queryString.toString());
-            } catch (SQLException ex) {
-                System.out.append(ex.getMessage());
-            }
-            return rs;
-        }
-        else{
-            return queryAll();
-        }
+       if(name==null){
+           return queryAll();
+       }
+       else{
+           StringBuffer queryString = new StringBuffer("select * from branch where ");
+           boolean flag = false;
+           if(name.length()!=0){
+               queryString.append("branchname=\'"+name+"\' and ");
+               flag = true;
+           }
+           if(city.length()!=0){
+               queryString.append("city=\'"+city + "\' and ");
+               flag = true;
+           }
+           if(assets.length()!=0){
+               queryString.append("assets = "+assets +" and ");
+               flag = true;
+           }
+           if(flag) {
+               //queryString.deleteCharAt(queryString.length() - 1);
+               queryString.delete(queryString.length()-5,queryString.length());
+               // System.out.println(queryString.toString());
+               Statement stmt = null;
+               ResultSet rs = null;
+               try {
+                   stmt = conn.createStatement();
+                   rs = stmt.executeQuery(queryString.toString());
+               } catch (SQLException ex) {
+                   System.out.append(ex.getMessage());
+               }
+               return rs;
+           }
+           else{
+               return queryAll();
+           }
+       }
     }
     public boolean update(String name,String newName,String city,String assets) throws SQLException {
         StringBuffer queryString = new StringBuffer("update branch set ");
@@ -339,8 +344,8 @@ public class BranchManage {
             Statement stmt = null;
             try {
                 stmt = conn.createStatement();
-                stmt.executeUpdate(queryString.toString());
-                return true;
+                return stmt.executeUpdate(queryString.toString()) > 0;
+                //return true;
             }
             catch (SQLException ex){
                 System.out.println(ex.getMessage());

@@ -10,47 +10,52 @@ public class EmployeeManage {
         conn = connector.getConn();
     }
     public ResultSet query(String employId, String branchName, String name, String phoneNumber, String address, String moveInDate){
-        StringBuffer queryString = new StringBuffer("select * from employee where ");
-        boolean flag = false;
-        if(employId.length()!=0){
-            queryString.append("employeeid = \'"+employId +"\' and ");
-            flag = true;
-        }
-        if(branchName.length()!=0){
-            queryString.append("branchname = \'" + branchName + "\' and ");
-            flag = true;
-        }
-        if(name.length()!=0){
-            queryString.append("name = \'" + name + "\' and ");
-            flag = true;
-        }
-        if(phoneNumber.length()!=0){
-            queryString.append("phonenum = \'" + phoneNumber + "\' and ");
-            flag = true;
-        }
-        if(address.length()!=0){
-            queryString.append("address = \'" + address +"\' and ");
-            flag = true;
-        }
-        if(moveInDate.length()!=0){
-            queryString.append("moveindate = \'" + moveInDate + "\' and ");
-        }
-        if(flag){
-            queryString.delete(queryString.length()-5,queryString.length());
-            Statement stmt = null;
-            ResultSet rs = null;
-            try{
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(queryString.toString());
-            }
-            catch (SQLException ex){
-                System.out.println(ex.getMessage());
-            }
-            return rs;
-        }
-        else{
-            return queryAll();
-        }
+       if(employId==null){
+           return queryAll();
+       }
+       else{
+           StringBuffer queryString = new StringBuffer("select * from employee where ");
+           boolean flag = false;
+           if(employId.length()!=0){
+               queryString.append("employeeid = \'"+employId +"\' and ");
+               flag = true;
+           }
+           if(branchName.length()!=0){
+               queryString.append("branchname = \'" + branchName + "\' and ");
+               flag = true;
+           }
+           if(name.length()!=0){
+               queryString.append("name = \'" + name + "\' and ");
+               flag = true;
+           }
+           if(phoneNumber.length()!=0){
+               queryString.append("phonenum = \'" + phoneNumber + "\' and ");
+               flag = true;
+           }
+           if(address.length()!=0){
+               queryString.append("address = \'" + address +"\' and ");
+               flag = true;
+           }
+           if(moveInDate.length()!=0){
+               queryString.append("moveindate = \'" + moveInDate + "\' and ");
+           }
+           if(flag){
+               queryString.delete(queryString.length()-5,queryString.length());
+               Statement stmt = null;
+               ResultSet rs = null;
+               try{
+                   stmt = conn.createStatement();
+                   rs = stmt.executeQuery(queryString.toString());
+               }
+               catch (SQLException ex){
+                   System.out.println(ex.getMessage());
+               }
+               return rs;
+           }
+           else{
+               return queryAll();
+           }
+       }
     }
     private ResultSet queryAll(){
         ResultSet rs = null;
@@ -148,8 +153,8 @@ public class EmployeeManage {
             Statement stmt = null;
             try {
                 stmt = conn.createStatement();
-                stmt.executeUpdate(queryString.toString());
-                return true;
+                return stmt.executeUpdate(queryString.toString()) > 0;
+                //return true;
             }
             catch (SQLException ex){
                 System.out.println(ex.getMessage());

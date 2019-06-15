@@ -54,51 +54,56 @@ public class ClientManage {
         return rs;
     }
     public ResultSet query(String clientId,String clientName,String phoneNum,String address,String contactName,String contactEmail,String contactClientRelation){
-        StringBuffer queryString = new StringBuffer("select * from client where ");
-        Statement statement;
-        ResultSet resultSet = null;
-        boolean flag = false;
-        if(clientId.length()!=0){
-            queryString.append("clientid = \'"+clientId +"\' and ");
-            flag = true;
-        }
-        if(clientName.length()!=0){
-            queryString.append("clientName = \'"+ clientName +"\' and ");
-            flag = true;
-        }
-        if(phoneNum.length()!=0){
-            queryString.append("phonenum = \'" + phoneNum + "\' and ");
-            flag = true;
-        }
-        if(address.length()!=0){
-            queryString.append("address = \'" + address + "\' and ");
-            flag = true;
-        }
-        if(contactName.length()!=0){
-            queryString.append("contactname = \'"+contactName + "\' and ");
-            flag = true;
-        }
-        if(contactEmail.length()!=0){
-            queryString.append("contactemail = \'" + contactEmail + "\' and ");
-            flag = true;
-        }
-        if(contactClientRelation.length()!=0){
-            queryString.append("contactclientrelation = \'"+contactClientRelation + "\' and ");
-            flag = true;
-        }
-        if(flag){
-            queryString.delete(queryString.length()-5,queryString.length());
-            try{
-                statement = conn.createStatement();
-                resultSet = statement.executeQuery(queryString.toString());
-            }
-            catch (SQLException ex){
-                System.out.println(ex.getMessage());
-            }
-            return resultSet;
+        if(clientId==null){
+            return queryAll();
         }
         else{
-            return queryAll();
+            StringBuffer queryString = new StringBuffer("select * from client where ");
+            Statement statement;
+            ResultSet resultSet = null;
+            boolean flag = false;
+            if(clientId.length()!=0){
+                queryString.append("clientid = \'"+clientId +"\' and ");
+                flag = true;
+            }
+            if(clientName.length()!=0){
+                queryString.append("clientName = \'"+ clientName +"\' and ");
+                flag = true;
+            }
+            if(phoneNum.length()!=0){
+                queryString.append("phonenum = \'" + phoneNum + "\' and ");
+                flag = true;
+            }
+            if(address.length()!=0){
+                queryString.append("address = \'" + address + "\' and ");
+                flag = true;
+            }
+            if(contactName.length()!=0){
+                queryString.append("contactname = \'"+contactName + "\' and ");
+                flag = true;
+            }
+            if(contactEmail.length()!=0){
+                queryString.append("contactemail = \'" + contactEmail + "\' and ");
+                flag = true;
+            }
+            if(contactClientRelation.length()!=0){
+                queryString.append("contactclientrelation = \'"+contactClientRelation + "\' and ");
+                flag = true;
+            }
+            if(flag){
+                queryString.delete(queryString.length()-5,queryString.length());
+                try{
+                    statement = conn.createStatement();
+                    resultSet = statement.executeQuery(queryString.toString());
+                }
+                catch (SQLException ex){
+                    System.out.println(ex.getMessage());
+                }
+                return resultSet;
+            }
+            else{
+                return queryAll();
+            }
         }
     }
     public boolean update(String clientId,String newClientId,String clientName,String phoneNum,String address,String contactName,String contactEmail,String contactClientRelation){
@@ -138,7 +143,7 @@ public class ClientManage {
             Statement statement;
             try {
                 statement = conn.createStatement();
-                return statement.executeUpdate(updateString.toString()) >0;
+                return statement.executeUpdate(updateString.toString()) > 0;
             }
             catch (SQLException ex){
                 System.out.println(ex.getMessage());

@@ -1,6 +1,4 @@
 package dblab3;
-
-import java.security.PublicKey;
 import java.sql.*;
 
 public class AccountManage {
@@ -11,109 +9,129 @@ public class AccountManage {
         conn = connector.getConn();
     }
     public ResultSet querySavingAccount(String accountNum,String branchName,String employeeid,String balance,String createDate,String recentVisitDate,String interestrate,String currencyType){
-        StringBuffer queryString = new StringBuffer("select * from savingaccount where ");
-        boolean flag = false;
-        if(accountNum.length()!=0){
-            queryString.append("accountnum = \'"+accountNum + "\' and ");
-            flag = true;
+        if(accountNum==null){
+            Statement statement = null;
+            try {
+                statement = conn.createStatement();
+                return statement.executeQuery("select * from savingaccount");
+            }
+            catch (SQLException ex){
+                System.out.println(ex.getMessage());
+                return null;
+            }
         }
-        if(branchName.length()!=0){
-            queryString.append("branchname = \'" + branchName + "\' and ");
-            flag = true;
-        }
-        if(employeeid.length()!=0){
-            queryString.append("employeeid = \'"+employeeid + "\' and ");
-            flag = true;
-        }
-        if(balance.length()!=0){
-            queryString.append("balance = " + balance +" and ");
-            flag = true;
-        }
-        if(createDate.length()!=0){
-            queryString.append("createdate = \'" +createDate + "\' and ");
-            flag = true;
-        }
-        if(recentVisitDate.length()!=0){
-            queryString.append("recentvisitdate = \'" + recentVisitDate + "\' and ");
-            flag = true;
-        }
-        if(interestrate.length()!=0){
-            queryString.append("interestrate = "+interestrate + " and ");
-            flag = true;
-        }
-        if(currencyType.length()!=0){
-            queryString.append("currencytype = \'"+currencyType + "\' and ");
-            flag = true;
-        }
-        queryString.delete(queryString.length()-5,queryString.length());
-        if(!flag){
-            queryString.delete(0,queryString.length());
-            queryString.append("select * from savingaccount");
-        }
-        Statement statement;
-        ResultSet resultSet = null;
-        try {
-            statement = conn.createStatement();
-            resultSet = statement.executeQuery(queryString.toString());
+        else{
+            StringBuffer queryString = new StringBuffer("select * from savingaccount where ");
+            boolean flag = false;
+            if(accountNum.length()!=0){
+                queryString.append("accountnum = \'"+accountNum + "\' and ");
+                flag = true;
+            }
+            if(branchName.length()!=0){
+                queryString.append("branchname = \'" + branchName + "\' and ");
+                flag = true;
+            }
+            if(employeeid.length()!=0){
+                queryString.append("employeeid = \'"+employeeid + "\' and ");
+                flag = true;
+            }
+            if(balance.length()!=0){
+                queryString.append("balance = " + balance +" and ");
+                flag = true;
+            }
+            if(createDate.length()!=0){
+                queryString.append("createdate = \'" +createDate + "\' and ");
+                flag = true;
+            }
+            if(recentVisitDate.length()!=0){
+                queryString.append("recentvisitdate = \'" + recentVisitDate + "\' and ");
+                flag = true;
+            }
+            if(interestrate.length()!=0){
+                queryString.append("interestrate = "+interestrate + " and ");
+                flag = true;
+            }
+            if(currencyType.length()!=0){
+                queryString.append("currencytype = \'"+currencyType + "\' and ");
+                flag = true;
+            }
+            queryString.delete(queryString.length()-5,queryString.length());
+            if(!flag){
+                queryString.delete(0,queryString.length());
+                queryString.append("select * from savingaccount");
+            }
+            Statement statement;
+            ResultSet resultSet = null;
+            try {
+                statement = conn.createStatement();
+                resultSet = statement.executeQuery(queryString.toString());
 
+            }
+            catch (SQLException ex){
+                System.out.println(ex.getMessage());
+            }
+            return resultSet;
         }
-        catch (SQLException ex){
-            System.out.println(ex.getMessage());
-        }
-        return resultSet;
-
-
     }
-
     public ResultSet queryCheckAccount(String accountNum,String branchName,String employeeid,String balance,String createDate,String recentVisitDate,String accountLimit){
-        StringBuffer queryString = new StringBuffer("select * from checkaccount where ");
-        boolean flag = false;
-        if(accountNum.length()!=0){
-            queryString.append("accountnum = \'"+accountNum + "\' ,");
-            flag = true;
+        if(accountNum==null){
+            Statement statement = null;
+            try {
+                statement = conn.createStatement();
+                return statement.executeQuery("select * from checkaccount");
+            }
+            catch (SQLException ex){
+                System.out.println(ex.getMessage());
+                return null;
+            }
         }
-        if(branchName.length()!=0){
-            queryString.append("branchname = \'" + branchName + "\' ,");
-            flag = true;
+        else{
+            StringBuffer queryString = new StringBuffer("select * from checkaccount where ");
+            boolean flag = false;
+            if (accountNum.length() != 0) {
+                queryString.append("accountnum = \'" + accountNum + "\' and ");
+                flag = true;
+            }
+            if (branchName.length() != 0) {
+                queryString.append("branchname = \'" + branchName + "\' and ");
+                flag = true;
+            }
+            if (employeeid.length() != 0) {
+                queryString.append("employeeid = \'" + employeeid + "\' and ");
+                flag = true;
+            }
+            if (balance.length() != 0) {
+                queryString.append("balance = " + balance + " and ");
+                flag = true;
+            }
+            if (createDate.length() != 0) {
+                queryString.append("createdate = \'" + createDate + "\' and ");
+                flag = true;
+            }
+            if (recentVisitDate.length() != 0) {
+                queryString.append("recentvisitdate = \'" + recentVisitDate + "\' and ");
+                flag = true;
+            }
+            if (accountLimit.length() != 0) {
+                queryString.append("accountlimit = " + accountLimit + " and ");
+                flag = true;
+            }
+            queryString.delete(queryString.length()-5,queryString.length());
+            if (!flag) {
+                queryString.delete(0, queryString.length());
+                queryString.append("select * from checkaccount");
+            }
+            Statement statement;
+            ResultSet resultSet = null;
+            try {
+                statement = conn.createStatement();
+                resultSet = statement.executeQuery(queryString.toString());
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+            return resultSet;
         }
-        if(employeeid.length()!=0){
-            queryString.append("employeeid = \'"+employeeid + "\' ,");
-            flag = true;
-        }
-        if(balance.length()!=0){
-            queryString.append("balance = " + balance +",");
-            flag = true;
-        }
-        if(createDate.length()!=0){
-            queryString.append("createdate = \'" +createDate + "\' ,");
-            flag = true;
-        }
-        if(recentVisitDate.length()!=0){
-            queryString.append("recentvisitdate = \'" + recentVisitDate + "\' ,");
-            flag = true;
-        }
-        if(accountLimit.length()!=0){
-            queryString.append("accountlimit = " +accountLimit + ",");
-            flag = true;
-        }
-        queryString.deleteCharAt(queryString.length()-1);
-        if(!flag){
-            queryString.delete(0,queryString.length());
-            queryString.append("select * from checkaccount");
-        }
-        Statement statement;
-        ResultSet resultSet = null;
-        try {
-            statement = conn.createStatement();
-            resultSet = statement.executeQuery(queryString.toString());
-        }
-        catch (SQLException ex){
-            System.out.println(ex.getMessage());
-        }
-        return resultSet;
-
     }
-
     public boolean addSavingAccount(String clientId,String accountNum,String branchname,String employeeId,String interestrate,String currencyType){
         CallableStatement callableStatement = null;
         String sql = "{call create_saving_account(?,?,?,?,?,?,?,?,?)}";
@@ -172,12 +190,131 @@ public class AccountManage {
         return false;
     }
     public boolean updateSavingAccount(String accountNum,String balance,String employeeId,String interestrate,String currencyType){
-        String updateSavingAccountString = "update savingaccount set ";
-        String updateAccountString = "update account set ";
+        StringBuffer updateSavingAccountString = new StringBuffer("update savingaccount set ");
+        StringBuffer updateAccountString = new StringBuffer("update account set ");
+        boolean flag1 = false;
+        boolean flag2 = false;
+        if(balance.length()!=0){
+            updateAccountString.append("balance = " + balance +" ,");
+            updateSavingAccountString.append("balance = " + balance +" ,");
+            flag1 = true;
+            flag2 = true;
+        }
+        if(employeeId.length()!=0){
+            updateAccountString.append("employeeid = \'"+employeeId +"\' ,");
+            updateSavingAccountString.append("employeeid = \'"+employeeId +"\' ,");
+            flag1 = true;
+            flag2 = true;
+        }
+        if(interestrate.length()!=0){
+            updateSavingAccountString.append("interestrate = "+Float.parseFloat(interestrate)+" ,");
+            flag1 = true;
+        }
+        if(currencyType.length()!=0){
+            updateSavingAccountString.append("currencytype = \'"+currencyType+"\' ,");
+            flag1 = true;
+        }
+        if(flag1) {
+            updateSavingAccountString.deleteCharAt(updateSavingAccountString.length() - 1);
+            updateSavingAccountString.append("where accountnum = \'" + accountNum + "\'");
+            Statement statement;
+            if(flag2){
+                updateAccountString.deleteCharAt(updateAccountString.length()-1);
+                updateAccountString.append("where accountnum = \'"+accountNum +"\'");
+                try {
+                    statement = conn.createStatement();
+                    statement.addBatch(updateAccountString.toString());
+                    statement.addBatch(updateSavingAccountString.toString());
+                    int[] count = statement.executeBatch();
+                    return count[0]>0 && count[1] >0;
+                }
+                catch (SQLException ex){
+                    System.out.println(ex.getMessage());
+                    return false;
+                }
+            }
+            else{
+                try {
+                    statement = conn.createStatement();
+                    return statement.executeUpdate(updateSavingAccountString.toString())>0;
+                }
+                catch (SQLException ex){
+                    System.out.println(ex.getMessage());
+                    return false;
+                }
+            }
 
-        return false;
+        }
+        else{
+            return true;
+        }
     }
-    public boolean updateCheckAccount(){
-        return false;
+    public boolean updateCheckAccount(String accountNum,String balance,String employeeId,String accountLimit){
+        StringBuffer updateCheckAccountString = new StringBuffer("update checkaccount set ");
+        StringBuffer updateAccountString = new StringBuffer("update account set ");
+        boolean flag1 = false;
+        boolean flag2 = false;
+        if(balance.length()!=0){
+            updateAccountString.append("balance = " + balance +" ,");
+            updateCheckAccountString.append("balance = " + balance +" ,");
+            flag1 = true;
+            flag2 = true;
+        }
+        if(employeeId.length()!=0){
+            updateAccountString.append("employeeid = \'"+employeeId +"\' ,");
+            updateCheckAccountString.append("employeeid = \'"+employeeId +"\' ,");
+            flag1 = true;
+            flag2 = true;
+        }
+        if(accountLimit.length()!=0){
+            updateCheckAccountString.append("accountlimit = "+Integer.parseInt(accountLimit)+" ,");
+            flag1 = true;
+        }
+        if(flag1){
+            Statement statement;
+            updateCheckAccountString.deleteCharAt(updateCheckAccountString.length()-1);
+            updateCheckAccountString.append("where accountnum = \'"+accountNum +"\'");
+            if(flag2){
+                updateAccountString.deleteCharAt(updateAccountString.length()-1);
+                updateAccountString.append("where accountnum = \'"+accountNum +"\'");
+                try {
+                    statement = conn.createStatement();
+                    statement.addBatch(updateAccountString.toString());
+                    statement.addBatch(updateCheckAccountString.toString());
+                    int[] count = statement.executeBatch();
+                    return count[0] > 0 && count[1] > 0;
+                }
+                catch (SQLException ex){
+                    System.out.println(ex.getMessage());
+                    return false;
+                }
+            }
+            else{
+                try {
+                    statement = conn.createStatement();
+                    return statement.executeUpdate(updateCheckAccountString.toString())>0;
+                }
+                catch (SQLException ex){
+                    System.out.println(ex.getMessage());
+                    return false;
+                }
+            }
+        }
+        else{
+            return true;
+        }
+    }
+    public ResultSet queryClients(String accountNum){
+        String queryString = "select clientid from clientaccount where accountnum = \'" + accountNum + "\'";
+        Statement statement;
+        ResultSet resultSet = null;
+        try{
+            statement = conn.createStatement();
+            resultSet = statement.executeQuery(queryString);
+        }
+        catch (SQLException ex){
+            System.out.println(ex.getMessage());
+        }
+        return resultSet;
     }
 }
